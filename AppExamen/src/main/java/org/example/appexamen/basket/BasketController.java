@@ -27,9 +27,9 @@ public class BasketController {
         return ResponseEntity.ok(basket);
     }
 
-    @PutMapping("")
+    @PutMapping("/add-to-cart")
     public ResponseEntity<Void> addItemToBasket(@RequestBody Basket basket, @RequestParam Long itemId) {
-        basketService.addProductToBasket(itemId,basket);
+        basketService.addProductToBasket(itemId, basket);
         return ResponseEntity.ok().build();
     }
     @DeleteMapping("/{itemId}")

@@ -31,24 +31,16 @@ public class BasketService {
         return basketRepository.findByUserId(currentUserId);
     }
 
-    public void addProductToBasket(Long productId, Basket basket) {
-
-        User activeUser = userRepository.findByIsActive(true)
-                .orElseThrow(()-> new IllegalStateException("No active user"));
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalStateException("Product not found with ID: " + productId));
-        if(basket.getUser().equals(activeUser))
-        {
-            basket.addProduct(product);
+    public void addProductToBasket(Long itemId, Basket basket) {
+        Optional<Product> product = productRepository.findById(itemId);
+        if (product.isPresent()) {
+            basket.addProduct(product.get());
+            basketRepository.save(basket);
+        } else {
+            throw new IllegalArgumentException("Product not found");
         }
-        else
-        {
-            basket=createNewBasket(activeUser);
-            basket.addProduct(product);
-        }
-        basketRepository.save(basket);
     }
+
 
     private Basket createNewBasket(User user) {
         Basket newBasket = new Basket();
